@@ -1,17 +1,27 @@
+#include "hash_tables.h"
+/**
+* hash_table_get - retrieves a value associated with a key.
+*@ht: is the hash table you want to look into
+*@key:  is the key you are looking for
+*Return:  Returns the value associated with the element,
+* or NULL if key couldn’t be found
+*/
+char *hash_table_get(const hash_table_t *ht, const char *key)
+{
+	hash_node_t *tmp;
+	unsigned long int idx;
 
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
- "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
-  <head>
-    <title>503 first byte timeout</title>
-  </head>
-  <body>
-    <h1>Error 503 first byte timeout</h1>
-    <p>first byte timeout</p>
-    <h3>Error 54113</h3>
-    <p>Details: cache-iad-kcgs7200082-IAD 1694222814 3960414837</p>
-    <hr>
-    <p>Varnish cache server</p>
-  </body>
-</html>
+	if (!ht || !key)
+		return (NULL);
+
+	idx = key_index((const unsigned char *)key, ht->size);
+
+	tmp = ht->array[idx];
+	while (tmp)
+	{
+		if (strcmp(key, tmp->key) == 0)
+			return (tmp->value);
+		tmp = tmp->next;
+	}
+	return (NULL);
+}
